@@ -3,7 +3,7 @@ const client = new Discord.Client();
 import {
   knowMyRankByName
 } from './func.js';
-import config from './config.json';
+import config from './config.js';
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);

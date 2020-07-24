@@ -5,7 +5,7 @@
     "author": "wallace",
     "type": "module",
     "scripts": {
-        "start": "node bot.js"
+        "start": "node --experimental-modules bot.js"
     },
     "dependencies": {
         "discord.js": "^12.2.0",
