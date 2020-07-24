@@ -1,30 +1,28 @@
-const Discord = require('discord.js');
+import * as Discord from 'discord.js';
 const client = new Discord.Client();
-const support = require('./func.js');
-const https = require('https');
-
-client.login("NzM1ODY0ODA5NzE0ODc2NDI3.XxmfTA.Wp3FcNI5Vo6NN1kHaqsj_olYH6A");
+import {
+  knowMyRankByName
+} from './func.js';
+import config from './config.json';
 
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-  });
-  
-  client.on('message', async msg => {
-    let stringMsg  = msg.content;
-    if (stringMsg.match(/^-lolRank (.*)/) != null){
-      let summonerName = (stringMsg.match(/^-lolRank (.*)/)[1]);
-      let res = await support.knowMyRankByName(summonerName);
-      if (res.length>1) {
-        msg.reply(res);
-      }else{
-        msg.reply("Ce joueur n'a jamais fait de Ranked ou n'existe pas :( ");
-      }
+  console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('message', async msg => {
+  const stringMsg = msg.content;
+  if (stringMsg.match(/^-lolRank (.*)/) != null) {
+    const summonerName = (stringMsg.match(/^-lolRank (.*)/)[1]);
+    const res = await knowMyRankByName(summonerName);
+    if (res.length > 1) {
+      msg.reply(res);
+    } else {
+      msg.reply("Ce joueur n'a jamais fait de Ranked ou n'existe pas :( ");
     }
-    if (msg.content.match("ping")) {
-      msg.channel.send("test");
-    }
-  });
+  }
+  if (msg.content.match("ping")) {
+    msg.channel.send("test");
+  }
+});
 
-
-
-
+client.login(config.discord.token);
