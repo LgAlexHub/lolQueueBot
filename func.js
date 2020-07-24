@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import config from './config.json';
+import config from './config.js';
 
 function fetchApi(stringUrl) {
     return fetch(stringUrl + `?api_key=${config.riot.apiKey}`).then(res => res.json());

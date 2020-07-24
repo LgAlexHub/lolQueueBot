@@ -5,7 +5,11 @@
     "author": "wallace",
     "type": "module",
     "scripts": {
+<<<<<<< HEAD
         "start": "node --experimental-modules bot.js "
+=======
+        "start": "node --experimental-modules bot.js"
+>>>>>>> c45b41486bbe5b5a7b1f66f814a2803af47dadbf
     },
     "dependencies": {
         "discord.js": "^12.2.0",
