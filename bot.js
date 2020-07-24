@@ -26,7 +26,7 @@ client.on('message', async msg => {
   if (stringMsg.match(/^-spec (.*)/) != null) {
     const summonerName = (stringMsg.match(/^-spec (.*)/)[1]);
     const res = await specAGame(summonerName);
-    msg.reply(res);
+    msg.reply('\n'+res);
   }
   if (msg.content.match("ping")) {
     msg.channel.send("test");
