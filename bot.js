@@ -1,35 +1,35 @@
 import * as Discord from 'discord.js';
-const client = new Discord.Client();
-import {
-  knowMyRankByName, specAGame, getChamionList
-} from './func.js';
 import config from './config.js';
+import {
+  knowMyRankByName, getChamionList, getASummonerGame
+} from './home_module/func.js';
+import { isSummonnerInCache } from './home_module/cache.js'
+const client = new Discord.Client();
+var cacheSummoner;
+
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+  cacheSummoner = new Map();
+  client.user.setActivity("-helplol");
+  console.log(`${client.user.tag} Connecté`);
 });
 
 client.on('message', async msg => {
   const stringMsg = msg.content;
-  if (stringMsg === "i") {
-    console.log(await getChamionList());
-  }
-  if (stringMsg.match(/^-lolRank (.*)/) != null) {
-    const summonerName = (stringMsg.match(/^-lolRank (.*)/)[1]);
-    const res = await knowMyRankByName(summonerName);
-    if (res.length > 1) {
-      msg.reply(res);
-    } else {
-      msg.reply("Ce joueur n'a jamais fait de Ranked");
-    }
-  }
-  if (stringMsg.match(/^-spec (.*)/) != null) {
-    const summonerName = (stringMsg.match(/^-spec (.*)/)[1]);
-    const res = await specAGame(summonerName);
-    msg.reply('\n'+res);
-  }
-  if (msg.content.match("ping")) {
-    msg.channel.send("test");
+  let summonerName;
+  let res;
+  if (stringMsg === "-helplol") {
+    msg.reply("Commande disponible : \n-lolRank <Nom d'invocateur> \n-spec <Nom d'invocateur>");
+  } else if (stringMsg.match(/^-lolRank (.*)/) != null) {
+    summonerName = stringMsg.match(/^-lolRank (.*)/)[1];
+    res = await knowMyRankByName(summonerName, cacheSummoner);
+    msg.reply(res);
+  } else if (stringMsg.match(/^-spec (.*)/) != null) {
+    summonerName = stringMsg.match(/^-spec (.*)/)[1];
+    res =  await getASummonerGame(summonerName,cacheSummoner);
+    console.log(res);
+  } else if (msg.content.match("ping")) {
+    msg.reply("pong");
   }
 });
 
