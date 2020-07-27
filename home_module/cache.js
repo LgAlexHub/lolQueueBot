@@ -9,6 +9,10 @@ async function isSummonnerInCache(summonerName , cacheMap) {
     return summonerObj.getSummonerObj();
 }
 
+async function isRankedInCache(summonerName, cacheMap) {
+    if (cacheMap.get(summonerName) != undefined) return cacheMap.get(summonerName).getSummonerObj();
+}
+
 export {
     isSummonnerInCache
 }
