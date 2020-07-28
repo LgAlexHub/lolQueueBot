@@ -4,7 +4,7 @@ import {
   getChamionList, getASummonerGame
 } from './home_module/func.js';
 import {
-  isSummonnerInCache, isRankedInCache
+  isSummonnerInCache, isRankedInCache, clearCache
 } from './home_module/cache.js'
 const client = new Discord.Client();
 var cacheSummoner;
@@ -19,6 +19,8 @@ client.on('ready', () => {
 });
 
 client.on('message', async msg => {
+  clearCache(cacheSummoner);
+  clearCache(cacheRanked);
   const stringMsg = msg.content;
   let summonerName;
   let res;
@@ -27,7 +29,6 @@ client.on('message', async msg => {
   } else if (stringMsg.match(/^-lolRank (.*)/) != null) {
     summonerName = stringMsg.match(/^-lolRank (.*)/)[1];
     res = await isRankedInCache(summonerName, cacheSummoner, cacheRanked);
-    console.log(JSON.stringify(res,null,2));
   } else if (stringMsg.match(/^-spec (.*)/) != null) {
     summonerName = stringMsg.match(/^-spec (.*)/)[1];
     res = await getASummonerGame(summonerName, cacheSummoner);

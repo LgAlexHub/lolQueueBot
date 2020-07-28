@@ -14,10 +14,16 @@ async function isRankedInCache(summonerName, cacheMapSummoner, cacheMapRanked) {
     if (cacheMapRanked.get(summonerName) != undefined) return cacheMapRanked.get(summonerName).getRankedObj();
     let resAwait = await knowMyRankByName(summonerName, cacheMapSummoner);
     let rankedObj = new Ranked(new Date(), resAwait);
-    cacheMapRanked.set(summonerName,rankedObj);
+    cacheMapRanked.set(summonerName, rankedObj);
     return rankedObj.getRankedObj();
 }
 
+function clearCache(map) {
+    map.forEach((element, key) => {
+        if (new Date().getTime() - element.getDateAjout().getTime() > 3600000) map.delete(key);
+    });
+}
+
 export {
-    isSummonnerInCache, isRankedInCache
+    isSummonnerInCache, isRankedInCache, clearCache
 }
