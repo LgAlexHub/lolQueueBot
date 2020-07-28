@@ -44,16 +44,8 @@ async function getASummonerGame(summonerName, cacheMap) {
 async function knowMyRankByName(summonerName, cacheMap) {
     const summonerObj = await isSummonnerInCache(summonerName, cacheMap);
     const objRanked = await getRankedInformation(summonerObj.id);
-    if (!objRanked.length > 0) return "";
-    let returnString = "";
-    returnString += "Nom d'invocateur: **" + summonerObj.name + "** ";
-    for (let i = 0; i < objRanked.length; i++) {
-        if (objRanked[i].queueType == "RANKED_SOLO_5x5") {
-            returnString += "Rang: **" + objRanked[i].tier + " " + objRanked[i].rank + " " + objRanked[i].leaguePoints + " **lp ";
-            returnString += "Win: **" + objRanked[i].wins + " **Losses:** " + objRanked[i].losses + " **WinRate:** " + (objRanked[i].wins / (objRanked[i].wins + objRanked[i].losses) * 100).toFixed(2) + "**% ";
-        }
-    }
-    return returnString;
+    if (!objRanked.length > 0) return null;
+    return objRanked;
 }
 
 export {
