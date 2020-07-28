@@ -1,24 +1,43 @@
+import {Time} from '../class_module/Time.js';
 class Summoner{
-    constructor(dateAjout, summonerObj){
-        this.dateAjout = dateAjout;
-        this.summonerObj = summonerObj;
+    constructor(summonerMap){
+        // Map {TypeObj,ObjTime}
+       this.summonerMap = summonerMap;
     }
 
-    getDateAjout(){
-        return this.dateAjout;
+    getSummonerMap(){
+        return this.summonerMap;
     }
 
-    setDateAjout(newDate){
-        this.dateAjout = newDate;
+    setSummonerMap(newSummonerMap){
+        this.summonerMap = newSummonerMap;
     }
 
     getSummonerObj(){
-        return this.summonerObj;
+        return this.summonerMap.get("summoner").getObject();
     }
 
-    setSummonerObj(newSummonerObj){
-        this.summonerObj = newSummonerObj;
+    getSummonerObjDate(){
+        return this.summonerMap.get("summoner").getDateAjout();
     }
+
+    setSummonerObj(summonerObj){
+        this.summonerMap.set("summoner",new Time(new Date(),summonerObj));
+    }
+
+    getRankObj(){
+        return this.summonerMap.get("rank").getObject();
+    }
+
+    getRankObjDate(){
+        return this.summonerMap.get("rank").getDateAjout();
+    }
+
+    setRankObj(rankObj){
+        this.summonerMap.set("rank",new Time(new Date(),rankObj));
+    }
+
+    
 }
 
 export {Summoner};
