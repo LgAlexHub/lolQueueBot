@@ -8,18 +8,39 @@ const cacheSummoner = new Map();
 async function isSummonnerInCache(summonerName) {
     if (cacheSummoner.get(summonerName) == undefined) {
         let resAwait = await getSummonerObjByName(summonerName);
-        let timeObj = new Time(new Date(), resAwait);
-        let summonerObj = new Summoner(new Map().set("summoner", timeObj));
-        cacheSummoner.set(summonerName, summonerObj);
+        if (resAwait.id != undefined) {
+            let timeObj = new Time(new Date(), resAwait);
+            let summonerObj = new Summoner(new Map().set("summoner", timeObj));
+            cacheSummoner.set(summonerName, summonerObj);
+        }
     }
-    return cacheSummoner.get(summonerName).getSummonerMap().get("summoner").getObject();
+    return cacheSummoner.get(summonerName);
 }
 
 async function isRankedInCache(summonerName) {
-
+    let summonerObj = await isSummonnerInCache(summonerName);
+    if (summonerObj == undefined) return undefined;
+    if (summonerObj.getRankObj() == undefined) {
+        let rankObj = await knowMyRankByName(summonerName);
+        if (rankObj != null) {
+            summonerObj.setRankObj(rankObj);
+        }
+    }
+    return summonerObj.getRankObj();
 }
 
 function clearCache() {
+    let time =  new Date().getTime();
+    cacheSummoner.forEach((element, key) => {
+        if (time - element.getSummonerObjDate().getTime() > 60*60*1000) {
+            cacheSummoner.delete(key);
+        }
+        if (element.getRankObj() != undefined){
+            if(time - element.getRankObjDate().getTime() > 45*60*1000){
+                element.deleteRank();
+            }
+        }
+    });
 }
 
 export {
