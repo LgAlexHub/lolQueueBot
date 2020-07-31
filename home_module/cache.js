@@ -1,11 +1,11 @@
-import { getSummonerObjByName, knowMyRankByName } from './func.js';
+import { getSummonerObjByName, knowMyRankByName} from './func.js';
 import { Summoner } from '../class_module/Summoner.js';
 import { Time } from '../class_module/Time.js';
 
 const cacheSummoner = new Map();
-// Map {SummonerName,SummonerObj}
 
 async function isSummonnerInCache(summonerName) {
+    clearCache();
     if (cacheSummoner.get(summonerName) == undefined) {
         let resAwait = await getSummonerObjByName(summonerName);
         if (resAwait.id != undefined) {
@@ -18,6 +18,7 @@ async function isSummonnerInCache(summonerName) {
 }
 
 async function isRankedInCache(summonerName) {
+    clearCache();
     let summonerObj = await isSummonnerInCache(summonerName);
     if (summonerObj == undefined) return undefined;
     if (summonerObj.getRankObj() == undefined) {
@@ -30,19 +31,20 @@ async function isRankedInCache(summonerName) {
 }
 
 function clearCache() {
-    let time =  new Date().getTime();
+    let time = new Date().getTime();
     cacheSummoner.forEach((element, key) => {
-        if (time - element.getSummonerObjDate().getTime() > 60*60*1000) {
+
+        if (time - element.getSummonerObjDate().getTime() > 60 * 60 * 1000) {
             cacheSummoner.delete(key);
         }
-        if (element.getRankObj() != undefined){
-            if(time - element.getRankObjDate().getTime() > 45*60*1000){
-                element.deleteRank();
+        if (element.getRankObj() != undefined) {
+            if (time - element.getRankObjDate().getTime() > 60 * 60 * 1000) {
+                cacheSummoner.get(key).getSummonerMap().delete("rank");
             }
         }
     });
 }
 
 export {
-    isSummonnerInCache, isRankedInCache, clearCache
+    isSummonnerInCache, isRankedInCache
 }

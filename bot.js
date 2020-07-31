@@ -1,11 +1,8 @@
 import * as Discord from 'discord.js';
 import config from './config.js';
 import {
-  getChamionList, getASummonerGame, knowMyRankByName
+  displayRankInformation, displayGameInformation
 } from './home_module/func.js';
-import {
-  isSummonnerInCache, isRankedInCache, clearCache
-} from './home_module/cache.js'
 const client = new Discord.Client();
 
 client.on('ready', () => {
@@ -21,13 +18,12 @@ client.on('message', async msg => {
     msg.reply("Commande disponible : \n-lolRank <Nom d'invocateur> \n-spec <Nom d'invocateur>");
   } else if (stringMsg.match(/^-lolRank (.*)/) != null) {
     summonerName = stringMsg.match(/^-lolRank (.*)/)[1];
-    clearCache();
-    res = await isRankedInCache(summonerName);
-    
-    //console.log(res);
+    res = await displayRankInformation(summonerName);
+    msg.reply(res);
   } else if (stringMsg.match(/^-spec (.*)/) != null) {
     summonerName = stringMsg.match(/^-spec (.*)/)[1];
-    res = await getASummonerGame(summonerName, cacheSummoner);
+    res = await displayGameInformation(summonerName);
+    msg.reply(res);
   } else if (msg.content.match("ping")) {
     msg.reply("pong");
   }
